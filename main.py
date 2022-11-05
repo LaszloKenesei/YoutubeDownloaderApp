@@ -8,21 +8,24 @@ from PIL import ImageTk, Image
 audio = None
 url = None
 def audioBttn_clicked():
+    global audio
     resolution['state'] = DISABLED
     resolution.set('')
     audio = True
 
 def videoBttn_clicked():
+    global audio
     resolution['state'] = ACTIVE
     audio = False
 def downloadBttn_clicked():
+    global audio
+    global url
     directory = filedialog.askdirectory()
     url = urlEntry.get()
-    if audio == True:
+    if audio:
         functions.mp3_download()
-    elif audio == False:
+    else:
         functions.mp4_download()
-    return directory, url
 
 root = tk.Tk()
 
