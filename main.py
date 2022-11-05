@@ -1,9 +1,9 @@
-import functions
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk, Image
+#from functions import mp4_download, mp3_download
 
 audio = None
 url = None
@@ -17,15 +17,17 @@ def videoBttn_clicked():
     global audio
     resolution['state'] = ACTIVE
     audio = False
+
 def downloadBttn_clicked():
     global audio
     global url
     directory = filedialog.askdirectory()
     url = urlEntry.get()
     if audio:
-        functions.mp3_download()
+        mp3_download()
     else:
-        functions.mp4_download()
+        mp4_download()
+
 
 root = tk.Tk()
 
