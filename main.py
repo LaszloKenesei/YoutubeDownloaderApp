@@ -3,36 +3,42 @@ from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
 from PIL import ImageTk, Image
+from tkinter import messagebox
 from functions import mp3_download, mp4_download
 
 audio = True
 
 def audioBttn_clicked():
     global audio
-    resolution['state'] = DISABLED
+    selectres['state'] = DISABLED
+    selectres.set('')
     audio = True
     audioBttn['bg'] = '#cccccc'
     videoBttn['bg'] = '#e6e6e6'
 
 def videoBttn_clicked():
     global audio
-    resolution['state'] = ACTIVE
+    selectres['state'] = 'readonly'
     audio = False
     videoBttn['bg'] = '#cccccc'
     audioBttn['bg'] = '#e6e6e6'
 
 def downloadBttn_clicked():
     global audio
-    directory = filedialog.askdirectory()
     url = urlEntry.get()
-    resolution.set('')
-    urlEntry.delete(0, END)
+    resolution = selectres.get()
     if audio:
+        directory = filedialog.askdirectory()
         mp3_download(url, directory)
-        audio = True
+        urlEntry.delete(0, END)
     else:
-        mp4_download(url, directory)
-        audio = True
+        if resolution == '':
+            messagebox.showwarning("Warning", "Resolution not selected!")
+        else:
+            directory = filedialog.askdirectory()
+            mp4_download(url, directory, resolution)
+            urlEntry.delete(0, END)
+            selectres.set('')
 
 def on_enter(e):
     if e.widget['bg'] != '#cccccc':
@@ -81,10 +87,12 @@ downloadBttn.place(x=450, y=230, height=35, width=120)
 downloadBttn.bind("<Enter>", download_enter)
 downloadBttn.bind("<Leave>", download_leave)
 
-resolution = ttk.Combobox(root, values=['144p', '240p', '360p', '480p', '720p'], state='disabled', font=12)
-resolution.place(x=150, y=175, height=36, width=810)
+selectres = ttk.Combobox(root, values=['144p', '240p', '360p', '480p', '720p'], state='disabled', font=12)
+selectres.place(x=150, y=175, height=36, width=810)
 root.option_add('*TCombobox*Listbox.selectBackground', 'red')
 root.option_add('*TCombobox*Listbox.selectForeground', 'white')
+root.option_add('*TCombobox*Listbox.fieldBackground', 'white')
+selectres.bind("<<ComboboxSelected>>",lambda e: root.focus())
 
 logo = ImageTk.PhotoImage(Image.open('YouTube_full-color_icon_(2017).jpg').resize((70,50), Image.Resampling.LANCZOS))
 label = Label(root, image=logo)
