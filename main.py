@@ -5,25 +5,49 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 from functions import mp3_download, mp4_download
 
-audio = False
+audio = True
 
 def audioBttn_clicked():
+    global audio
     resolution['state'] = DISABLED
-    resolution.set('')
     audio = True
+    audioBttn['bg'] = '#cccccc'
+    videoBttn['bg'] = '#e6e6e6'
 
 def videoBttn_clicked():
+    global audio
     resolution['state'] = ACTIVE
     audio = False
+    videoBttn['bg'] = '#cccccc'
+    audioBttn['bg'] = '#e6e6e6'
 
 def downloadBttn_clicked():
+    global audio
     directory = filedialog.askdirectory()
     url = urlEntry.get()
+    resolution.set('')
+    urlEntry.delete(0, END)
     if audio:
         mp3_download(url, directory)
+        audio = True
     else:
         mp4_download(url, directory)
+        audio = True
 
+def on_enter(e):
+    if e.widget['bg'] != '#cccccc':
+        e.widget['bg'] = '#d9d9d9'
+
+def on_leave(e):
+    if e.widget['bg'] != '#cccccc':
+        e.widget['bg'] = '#e6e6e6'
+
+def download_enter(e):
+    downloadBttn['bg'] = '#ffffff'
+    downloadBttn['fg'] = '#ff1a1a'
+def download_leave(e):
+    downloadBttn['bg'] = '#ff1a1a'
+    downloadBttn['fg'] = '#ffffff'
 
 root = tk.Tk()
 
@@ -32,11 +56,16 @@ canvas = Canvas(root, width=1000, height=400, bg='white')
 canvas.pack()
 root.title('YouTube downloader')
 canvas.create_rectangle(0, 0, 1000, 70, fill='#e6e6e6', outline="#cccccc")
-audioBttn = Button(root, borderwidth=0, text="♬  Audio", font=('Calibri_Light 18'), bg='#e6e6e6', fg='#333333', command=audioBttn_clicked)
+audioBttn = Button(root, borderwidth=0, text="♬  Audio", font=('Calibri_Light 18'), bg='#cccccc', fg='#333333', command=audioBttn_clicked)
 audioBttn.place(x=360, y=3, width=140, height=65)
+audioBttn.bind("<Enter>", on_enter)
+audioBttn.bind("<Leave>", on_leave)
+
 
 videoBttn = tk.Button(root, borderwidth=0, text="▶  Video", font=('Calibri_Light 18'), bg='#e6e6e6', fg='#333333', command=videoBttn_clicked)
 videoBttn.place(x=500, y=3, width=140, height=65)
+videoBttn.bind("<Enter>", on_enter)
+videoBttn.bind("<Leave>", on_leave)
 
 urlLbl = Label(root, text='URL', anchor="e", fg='#404040', bg='white', justify='left', font=22)
 urlLbl.place(x=40, y=120, width=100)
@@ -49,13 +78,15 @@ urlEntry.place(x=150, y=120,  height=36, width=810)
 
 downloadBttn = Button(root, text='Download', bg='#ff1a1a', fg='#ffffff', justify=CENTER, font=('Calibri_Light 16'), bd=0, command=downloadBttn_clicked)
 downloadBttn.place(x=450, y=230, height=35, width=120)
+downloadBttn.bind("<Enter>", download_enter)
+downloadBttn.bind("<Leave>", download_leave)
 
-resolution = ttk.Combobox(root, values=['144p', '240p', '360p', '480p', '720p'], state='readonly', font=12)
+resolution = ttk.Combobox(root, values=['144p', '240p', '360p', '480p', '720p'], state='disabled', font=12)
 resolution.place(x=150, y=175, height=36, width=810)
 root.option_add('*TCombobox*Listbox.selectBackground', 'red')
 root.option_add('*TCombobox*Listbox.selectForeground', 'white')
 
-logo = ImageTk.PhotoImage(Image.open('YouTube_full-color_icon_(2017).jpg').resize((70,50), Image.LANCZOS))
+logo = ImageTk.PhotoImage(Image.open('YouTube_full-color_icon_(2017).jpg').resize((70,50), Image.Resampling.LANCZOS))
 label = Label(root, image=logo)
 label.place(x=10, y=10, height=50, width=70)
 
