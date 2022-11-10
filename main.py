@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
@@ -66,7 +67,6 @@ def download_leave(e):
     downloadBttn['fg'] = '#ffffff'
 
 root = tk.Tk()
-
 root.geometry('1000x400')
 root.minsize(height=400, width=1000)
 canvas = Canvas(root, width=1000, height=400, bg='white')
@@ -91,7 +91,7 @@ urlEntry = Entry(root, borderwidth=0, bg='#e6e6e6', font=22, justify=CENTER,  se
 urlEntry.place(x=150, y=120,  height=36, width=810)
 
 downloadBttn = Button(root, text='Download', bg='#ff1a1a', fg='#ffffff', justify=CENTER, font=('Calibri_Light 16'), bd=0, command=downloadBttn_clicked)
-downloadBttn.place(x=450, y=230, height=35, width=120)
+downloadBttn.place(x=440, y=230, height=35, width=120)
 downloadBttn.bind("<Enter>", download_enter)
 downloadBttn.bind("<Leave>", download_leave)
 
@@ -104,7 +104,6 @@ selectres.bind("<<ComboboxSelected>>",lambda e: root.focus())
 logo = ImageTk.PhotoImage(Image.open('YouTube_full-color_icon_(2017).jpg').resize((70,50), Image.Resampling.LANCZOS))
 label = Label(root, image=logo)
 label.place(x=10, y=10, height=50, width=70)
-
 
 root.mainloop()
 

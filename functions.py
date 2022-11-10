@@ -14,10 +14,7 @@ def mp4_download(url, directory, resolution):
     except:
         messagebox.showwarning("Warning", "This YouTube link does not exist!")
     mp4 = ytvideo.streams.filter(resolution=resolution).first()
-    try:
-        mp4.download(output_path=directory, filename=ytvideo.title + '.mp4')
-    except:
-        messagebox.showwarning("Warning", "Connection error!")
+    mp4.download(output_path=directory, filename=ytvideo.title + '.mp4')
 
 def mp3_download(url, directory):
     try:
@@ -25,7 +22,4 @@ def mp3_download(url, directory):
     except:
         messagebox.showwarning("Warning", "This YouTube link does not exist!")
     mp3 = ytvideo.streams.get_audio_only()
-    try:
-        mp3.download(output_path=directory, filename=ytvideo.title + '.mp3')
-    except:
-        messagebox.showwarning("Warning", "Connection error!")
+    mp3.download(output_path=directory, filename=ytvideo.title + '.mp3')
