@@ -50,8 +50,8 @@ def downloadBttn_clicked():
         mp3_download(url, directory)
         urlEntry.delete(0, END)
     else:
-        if resolution == '':
-            messagebox.showwarning("Warning", "Resolution not selected!")
+        if (resolution and url) == '':
+            messagebox.showwarning("Warning", "Missing information!")
         else:
             directory = filedialog.askdirectory()
             mp4_download(url, directory, resolution)

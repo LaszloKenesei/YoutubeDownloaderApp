@@ -7,15 +7,25 @@ print(f"Length:{ytvideo.length} sec")
 print("Uploader:", ytvideo.author)
 print(url)'''
 
-def mp4_download(url, directory, resolution):
-    ytvideo = YouTube(url)
-    mp4 = ytvideo.streams.filter(resolution=resolution).first()
-    #print(mp4)
-    mp4.download(output_path=directory, filename=ytvideo.title + '.mp4')
 
+def mp4_download(url, directory, resolution):
+    try:
+        ytvideo = YouTube(url)
+    except:
+        messagebox.showwarning("Warning", "This YouTube link does not exist!")
+    mp4 = ytvideo.streams.filter(resolution=resolution).first()
+    try:
+        mp4.download(output_path=directory, filename=ytvideo.title + '.mp4')
+    except:
+        messagebox.showwarning("Warning", "Connection error!")
 
 def mp3_download(url, directory):
-    ytvideo = YouTube(url)
+    try:
+        ytvideo = YouTube(url)
+    except:
+        messagebox.showwarning("Warning", "This YouTube link does not exist!")
     mp3 = ytvideo.streams.get_audio_only()
-    #rint(mp3)
-    mp3.download(output_path=directory, filename=ytvideo.title + '.mp3')
+    try:
+        mp3.download(output_path=directory, filename=ytvideo.title + '.mp3')
+    except:
+        messagebox.showwarning("Warning", "Connection error!")
